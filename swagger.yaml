@@ -1,0 +1,173 @@
+openapi: 3.0.3
+info:
+  title: USERS
+  version: 1.0.0
+
+servers:
+  - url: https://18.217.188.192
+
+paths:
+  /users:
+    post:
+      summary: Crear un nuevo usuario
+      description: Crea un nuevo usuario con id, name, email, last_name y password.
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Usuario creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Entrada inválida
+
+    get:
+      summary: Obtener todos los usuarios
+      description: Recupera una lista de todos los usuarios.
+      operationId: getUsers
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /users/{id}:
+    get:
+      summary: Obtener un usuario por ID
+      description: Recupera un usuario específico por su ID.
+      operationId: getUserById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Usuario no encontrado
+
+    put:
+      summary: Actualizar un usuario por ID
+      description: Actualiza un usuario existente por su ID.
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Usuario actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Entrada inválida
+        '404':
+          description: Usuario no encontrado
+
+    delete:
+      summary: Eliminar un usuario por ID
+      description: Elimina un usuario por su ID.
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Usuario eliminado exitosamente
+        '404':
+          description: Usuario no encontrado
+
+  /users/login:
+    post:
+      summary: Iniciar sesión
+      description: Autentica a un usuario mediante email y contraseña.
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Inicio de sesión exitoso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Credenciales inválidas
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - name
+        - email
+        - last_name
+        - password
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        email:
+          type: string
+        last_name:
+          type: string
+        password:
+          type: string
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        message:
+          type: string
