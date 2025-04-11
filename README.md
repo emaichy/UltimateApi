@@ -1,4 +1,4 @@
-#UltimateApi - Backend
+# UltimateApi - Backend
 
 Este repositorio contiene el desarrollo del API REST del proyecto Sistema de Basura Inteligente. Creado con Python y Flask, permite la gestión de usuarios, autenticación y manejo de información del sistema.
 
